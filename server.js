@@ -42,6 +42,18 @@ app.get("/", (req, res) => {
     });
   });
 
+/// GET /vip-lounge ///////////////////////////////
+
+app.get("/vip-lounge", async(req, res) => {
+    if (req.session.user) {
+      res.send(`Welcome to the Jungle ${req.session.user.username}.`);
+    } else {
+      res.send("Sorry, you are not allowed.");
+    }
+  });
+
+////////////////////////////////////////////////////
+
 app.listen(port, () => {
   console.log(`The express app is ready on port ${port}!`);
 });
