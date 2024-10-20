@@ -3,6 +3,8 @@ const methodOverride = require("method-override");
 const morgan = require("morgan");
 const dotenv = require("dotenv");
 const authController = require("./controllers/auth.js");
+const session = require('express-session');
+
 require('dotenv').config();
 dotenv.config();
 require("./config/database");
@@ -21,13 +23,23 @@ app.use(methodOverride("_method"));
 // Morgan for logging HTTP requests
 app.use(morgan('dev'));
 
-app.use("/auth", authController);
+app.use(
+    session({
+      secret: process.env.SESSION_SECRET,
+      resave: false,
+      saveUninitialized: true,
+    })
+  );
+
+  app.use("/auth", authController);
 
 // ROUTES //////////////
 
 // GET /
-app.get("/", async (req, res) => {
-    res.render("index.ejs");
+app.get("/", (req, res) => {
+    res.render("index.ejs", {
+      user: req.session.user,
+    });
   });
 
 app.listen(port, () => {
