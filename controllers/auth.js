@@ -53,7 +53,7 @@ const validPassword = bcrypt.compareSync(
   if (!validPassword) {
     return res.send("Login failed. Please try again.");
   };
-  
+
   req.session.user = {
     username: userInDatabase.username,
   };
@@ -61,5 +61,12 @@ const validPassword = bcrypt.compareSync(
   res.redirect("/");
 
   });
+
+  // sign out route
+
+router.get("/sign-out", (req, res) => {
+  req.session.destroy();
+  res.redirect("/");
+});
 
 module.exports = router;
